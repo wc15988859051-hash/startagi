@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
+.frame2 {
+  display: inline-flex;
+  align-items: center;
+  column-gap: 12px;
+  border: 1px solid #0ab7b1;
+  border-radius: 2px;
+  background: #0ab7b11a;
+  padding: 2px 7px;
+  width: 82px;
+  height: 24px;
+
+  .text {
+    flex-shrink: 0;
+    line-height: 18px;
+    letter-spacing: 0;
+    color: #0ab7b1;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+  }
+
+  .frame {
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+  }
+}

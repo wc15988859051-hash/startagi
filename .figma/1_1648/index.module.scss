@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+}
+
+.group1000007575 {
+  display: flex;
+  align-items: center;
+  width: 72px;
+  height: 20px;
+
+  .text {
+    line-height: 20px;
+    letter-spacing: 0;
+    color: #000000;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimHei, Arial, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+
+  .vector {
+    margin-left: 4px;
+    width: 12px;
+    height: 7px;
+    rotate: -180deg;
+  }
+}
