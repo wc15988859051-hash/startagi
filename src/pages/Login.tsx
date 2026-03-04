@@ -31,7 +31,7 @@ const Login: React.FC = () => {
           {/* Header */}
           <div className="mb-12">
             <h1 className="text-3xl font-bold text-white mb-2">
-              欢迎来到 <span className="text-[#3679ea]">StartAGI</span>
+              欢迎来到 <span className="text-[#0ab7b1]">StartAGI</span>
             </h1>
             <p className="text-[#babdc9] text-sm leading-relaxed">
               xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -40,44 +40,18 @@ const Login: React.FC = () => {
 
           {/* Form Section */}
           <div className="flex-grow flex flex-col justify-center">
-            <div className="flex justify-between items-baseline mb-8">
-              <h2 className="text-xl font-semibold text-white">登录</h2>
-              <span className="text-[#868a9a] text-sm tracking-widest font-medium">LOG IN</span>
+            <div className="flex items-baseline mb-8">
+              <h2 className="text-xl font-semibold text-white mr-4">登录</h2>
+              <span className="text-[#868a9a] text-sm tracking-widest font-medium uppercase">LOG IN</span>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-6">
-              {/* Account Input */}
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-[#babdc9] group-focus-within:text-white transition-colors" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="账户"
-                  className="w-full bg-[#3b3d47] text-white placeholder-[#babdc9] text-sm rounded-sm py-3 pl-12 pr-4 focus:outline-none focus:ring-1 focus:ring-[#3679ea] transition-all"
-                  required
-                />
-              </div>
-
-              {/* Password Input */}
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-[#babdc9] group-focus-within:text-white transition-colors" />
-                </div>
-                <input
-                  type="password"
-                  placeholder="密码"
-                  className="w-full bg-[#3b3d47] text-white placeholder-[#babdc9] text-sm rounded-sm py-3 pl-12 pr-4 focus:outline-none focus:ring-1 focus:ring-[#3679ea] transition-all"
-                  required
-                />
-              </div>
-
-              {/* Login Button */}
+              {/* GIO Quick Login Button */}
               <button
                 type="submit"
-                className="w-full bg-[#3679ea] hover:bg-[#2f68c9] text-white font-semibold py-3 rounded-sm transition-colors mt-8 shadow-lg shadow-blue-900/20"
+                className="w-full bg-[#0ab7b1] hover:bg-[#089e99] text-white font-bold py-3 rounded-sm transition-colors shadow-lg shadow-teal-900/20"
               >
-                登 录
+                GIO 账号快捷登录
               </button>
             </form>
           </div>

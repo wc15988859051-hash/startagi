@@ -12,3 +12,40 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+/* Show scrollbar thumb when hovering over the scrollable element */
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4); /* slate-400/40 */
+}
+
+/* Darker on hover of the thumb itself */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.8) !important; /* slate-500/80 */
+}
+
+/* Utility to hide scrollbar but keep functionality */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
