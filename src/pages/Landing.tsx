@@ -39,9 +39,10 @@ const Landing: React.FC = () => {
   const [currentView, setCurrentView] = useState<'chat' | 'history' | 'analysis' | 'persona' | 'history_detail'>('chat');
   const [isThinkingOpen, setIsThinkingOpen] = useState(true);
   const [selectedApp, setSelectedApp] = useState<string | null>(null);
-  const [chatTheme, setChatTheme] = useState<'default' | 'analysis' | 'persona' | 'cloud'>('default');
+  const [chatTheme, setChatTheme] = useState<'default' | 'analysis' | 'persona' | 'cloud'>('analysis');
   const [selectedHistory, setSelectedHistory] = useState<string | null>(null);
   const { isDark: isDarkMode, toggleTheme } = useTheme();
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const handleLogout = () => {
     // In a real app, clear auth tokens here
@@ -291,29 +292,10 @@ const Landing: React.FC = () => {
                 <p className="text-[#666666] text-sm mb-12 tracking-wider font-normal dark:text-gray-400">我可以帮你完成查询数据、业务问题诊断、制作报表、分析用户画像、活动策略建议，编写SQL等</p>
               </>
             ) : chatTheme === 'analysis' ? (
-              <div className="w-full mb-6">
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg shadow-teal-500/5 p-6 dark:bg-[#1a1d2d]/60 dark:border-teal-900/30">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-xs font-semibold text-teal-600 uppercase tracking-wider dark:text-teal-400">提问示例</span>
-                    <span className="text-xs text-slate-400 cursor-pointer hover:text-teal-600 transition-colors flex items-center gap-1 dark:text-gray-500 dark:hover:text-teal-400">
-                      查看问题库 <ChevronRight className="w-3 h-3" />
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-2.5 items-center">
-                    {[
-                      '过去7天购买总次数是多少？',
-                      '2024年7月按天查看购买总次数',
-                      '2024年7月促销活动名称为「夏季促销」的购买总次数',
-                      '2024年7月按性别查看购买总次数'
-                    ].map((item, index) => (
-                      <button key={index} className="px-3.5 py-2 rounded-lg bg-teal-50 text-xs text-teal-700 hover:bg-teal-100 hover:shadow-sm transition-all border border-transparent hover:border-teal-200 dark:bg-teal-900/20 dark:text-teal-400 dark:hover:bg-teal-900/40 dark:hover:border-teal-800/50">
-                        {item}
-                      </button>
-                    ))}
-                    <div className="w-5 h-5 border-2 border-teal-100 border-t-teal-500 rounded-full animate-spin ml-2 dark:border-teal-900/30 dark:border-t-teal-500"></div>
-                  </div>
-                </div>
-              </div>
+              <>
+                <h1 className="text-[28px] font-semibold text-slate-900 mb-4 tracking-tight dark:text-white">你好，我是 <span className="font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#00A8FF] to-[#00FFFF]">StartAGI</span></h1>
+                <p className="text-[#666666] text-sm mb-12 tracking-wider font-normal dark:text-gray-400">我可以帮你完成查询数据、业务问题诊断、制作报表、分析用户画像、活动策略建议，编写SQL等</p>
+              </>
             ) : (
               <>
                 <h1 className="text-[28px] font-semibold text-slate-900 mb-4 tracking-tight dark:text-white">你好，我是 <span className="font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#00A8FF] to-[#00FFFF]">StartAGI</span></h1>
@@ -323,6 +305,32 @@ const Landing: React.FC = () => {
 
             {/* Chat Input Card */}
             <div className="w-full h-48 relative mb-10 group">
+              {/* Examples Floating Panel for Analysis Theme */}
+              {chatTheme === 'analysis' && (
+                <div className={`w-full absolute bottom-full mb-[10px] z-20 transition-all duration-300 ${isInputFocused ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg shadow-teal-500/5 p-6 dark:bg-[#1a1d2d]/60 dark:border-teal-900/30">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-xs font-semibold text-teal-600 uppercase tracking-wider dark:text-teal-400">提问示例</span>
+                      <span className="text-xs text-slate-400 cursor-pointer hover:text-teal-600 transition-colors flex items-center gap-1 dark:text-gray-500 dark:hover:text-teal-400">
+                        查看问题库 <ChevronRight className="w-3 h-3" />
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-2.5 items-center">
+                      {[
+                        '过去7天购买总次数是多少？',
+                        '2024年7月按天查看购买总次数',
+                        '2024年7月促销活动名称为「夏季促销」的购买总次数',
+                        '2024年7月按性别查看购买总次数'
+                      ].map((item, index) => (
+                        <button key={index} className="px-3.5 py-2 rounded-lg bg-teal-50 text-xs text-teal-700 hover:bg-teal-100 hover:shadow-sm transition-all border border-transparent hover:border-teal-200 dark:bg-teal-900/20 dark:text-teal-400 dark:hover:bg-teal-900/40 dark:hover:border-teal-800/50">
+                          {item}
+                        </button>
+                      ))}
+                      <div className="w-5 h-5 border-2 border-teal-100 border-t-teal-500 rounded-full animate-spin ml-2 dark:border-teal-900/30 dark:border-t-teal-500"></div>
+                    </div>
+                  </div>
+                </div>
+              )}
               {/* Neon Glow & Border */}
               <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-2xl opacity-70 dark:opacity-100 blur-sm transition-opacity duration-500"></div>
               <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-2xl opacity-70 dark:opacity-100 transition-opacity duration-500"></div>
@@ -333,40 +341,27 @@ const Landing: React.FC = () => {
                 {chatTheme === 'analysis' && (
                   <div className="flex-shrink-0 flex items-center bg-teal-50 text-teal-600 px-2.5 py-1 rounded-md text-xs font-medium border border-teal-200 mt-0.5 dark:bg-teal-900/20 dark:text-teal-400 dark:border-teal-800/30">
                     智能问数
-                    <button 
-                      className="ml-2 hover:bg-teal-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors dark:hover:bg-teal-900/40"
-                      onClick={() => setChatTheme('default')}
-                    >
-                      ×
-                    </button>
                   </div>
                 )}
                 {chatTheme === 'persona' && (
                   <div className="flex-shrink-0 flex items-center bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-xs font-medium border border-indigo-200 mt-0.5 dark:bg-indigo-900/20 dark:text-indigo-400 dark:border-indigo-800/30">
                     智能个体画像
-                    <button 
-                      className="ml-2 hover:bg-indigo-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors dark:hover:bg-indigo-900/40"
-                      onClick={() => setChatTheme('default')}
-                    >
-                      ×
-                    </button>
                   </div>
                 )}
 
                 {chatTheme === 'cloud' && (
                   <div className="flex-shrink-0 flex items-center bg-sky-50 text-sky-600 px-2.5 py-1 rounded-md text-xs font-medium border border-sky-200 mt-0.5 dark:bg-sky-900/20 dark:text-sky-400 dark:border-sky-800/30">
                     智能云XX
-                    <button 
-                      className="ml-2 hover:bg-sky-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors dark:hover:bg-sky-900/40"
-                      onClick={() => setChatTheme('default')}
-                    >
-                      ×
-                    </button>
                   </div>
                 )}
 
                 <textarea 
                   className="flex-1 h-full resize-none outline-none text-slate-700 placeholder-[#999999] bg-transparent pt-0.5 text-base leading-relaxed dark:text-gray-200 dark:placeholder-gray-600"
+                  onFocus={() => setIsInputFocused(true)}
+                  onBlur={() => {
+                    // Small delay to allow clicking on example questions
+                    setTimeout(() => setIsInputFocused(false), 200);
+                  }}
                   placeholder={
                     chatTheme === 'persona' 
                       ? "请输入关于当前用户（用户ID：250910）的基础信息或行为问题，如：用户会员等级。支持最近30天的数据查询。" 
@@ -469,6 +464,31 @@ const Landing: React.FC = () => {
 
             {/* Chat Input Card */}
             <div className="w-full h-48 relative mb-10 group">
+              {/* Examples Floating Panel */}
+              <div className={`w-full absolute bottom-full mb-[10px] z-20 transition-all duration-300 ${isInputFocused ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg shadow-teal-500/5 p-6 dark:bg-[#1a1d2d]/60 dark:border-teal-900/30">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-xs font-semibold text-teal-600 uppercase tracking-wider dark:text-teal-400">提问示例</span>
+                    <span className="text-xs text-slate-400 cursor-pointer hover:text-teal-600 transition-colors flex items-center gap-1 dark:text-gray-500 dark:hover:text-teal-400">
+                      查看问题库 <ChevronRight className="w-3 h-3" />
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-2.5 items-center">
+                    {[
+                      '过去7天购买总次数是多少？',
+                      '2024年7月按天查看购买总次数',
+                      '2024年7月促销活动名称为「夏季促销」的购买总次数',
+                      '2024年7月按性别查看购买总次数'
+                    ].map((item, index) => (
+                      <button key={index} className="px-3.5 py-2 rounded-lg bg-teal-50 text-xs text-teal-700 hover:bg-teal-100 hover:shadow-sm transition-all border border-transparent hover:border-teal-200 dark:bg-teal-900/20 dark:text-teal-400 dark:hover:bg-teal-900/40 dark:hover:border-teal-800/50">
+                        {item}
+                      </button>
+                    ))}
+                    <div className="w-5 h-5 border-2 border-teal-100 border-t-teal-500 rounded-full animate-spin ml-2 dark:border-teal-900/30 dark:border-t-teal-500"></div>
+                  </div>
+                </div>
+              </div>
+
               {/* Neon Glow & Border */}
               <div className="absolute -inset-[1px] bg-gradient-to-r from-teal-300 via-cyan-400 to-blue-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-xl opacity-70 dark:opacity-100 blur-sm transition-opacity duration-500"></div>
               <div className="absolute -inset-[1px] bg-gradient-to-r from-teal-300 via-cyan-400 to-blue-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-xl opacity-70 dark:opacity-100 transition-opacity duration-500"></div>
@@ -484,6 +504,10 @@ const Landing: React.FC = () => {
 
                 <textarea 
                   className="flex-1 h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent text-base leading-relaxed dark:text-gray-200 dark:placeholder-gray-600"
+                  onFocus={() => setIsInputFocused(true)}
+                  onBlur={() => {
+                    setTimeout(() => setIsInputFocused(false), 200);
+                  }}
                   placeholder="请输入你的问题..."
                 />
               </div>
@@ -525,41 +549,6 @@ const Landing: React.FC = () => {
                 />
               </div>
             </div>
-            </div>
-
-            {/* Analysis Chips */}
-            <div className="w-full">
-              <div className="flex flex-wrap gap-3 items-center">
-                {[
-                  '过去7天购买总次数是多少？',
-                  '2024年7月按天查看购买总次数',
-                  '2024年7月促销活动名称为「夏季促销」的购买总次数',
-                  '2024年7月按性别查看购买总次数'
-                ].map((item, index) => (
-                  <button key={index} className="px-4 py-2 rounded-full bg-transparent border border-slate-200 text-xs text-slate-600 hover:bg-slate-50 transition-colors dark:bg-white/5 dark:border-white/5 dark:text-gray-400 dark:hover:bg-white/10">
-                    {item}
-                  </button>
-                ))}
-                
-                <div className="flex items-center space-x-4 ml-2">
-                  <div className="flex items-center text-[#666666] text-xs cursor-pointer hover:text-black transition-colors dark:text-gray-500 dark:hover:text-gray-300">
-                    <svg className="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                      <path d="M3 3v5h5" />
-                      <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
-                      <path d="M16 16h5v5" />
-                    </svg>
-                    刷新
-                  </div>
-                  <div className="flex items-center text-[#666666] text-xs cursor-pointer hover:text-black transition-colors dark:text-gray-500 dark:hover:text-gray-300">
-                    <svg className="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 6v6l4 2" />
-                    </svg>
-                    查看问题库
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         ) : currentView === 'persona' ? (
