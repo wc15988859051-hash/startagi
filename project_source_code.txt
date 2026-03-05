@@ -1,4 +1,119 @@
---- package.json ---
+--- ./index.html ---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Trae Project</title>
+    <script type="module">
+      if (import.meta.hot?.on) {
+        import.meta.hot.on('vite:error', (error) => {
+          if (error.err) {
+            console.error(
+              [error.err.message, error.err.frame].filter(Boolean).join('\n'),
+            )
+          }
+        })
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+
+--- ./tailwind.config.js ---
+/** @type {import('tailwindcss').Config} */
+
+export default {
+  darkMode: "class",
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    container: {
+      center: true,
+    },
+    extend: {},
+  },
+  plugins: [],
+};
+
+
+--- ./vercel.json ---
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "trailingSlash": false
+}
+
+
+--- ./README.md ---
+# React + TypeScript + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
+
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default tseslint.config({
+  extends: [
+    // other configs...
+    // Enable lint rules for React
+    reactX.configs['recommended-typescript'],
+    // Enable lint rules for React DOM
+    reactDom.configs.recommended,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
+
+
+--- ./package.json ---
 {
   "name": "trae-project",
   "private": true,
@@ -43,7 +158,7 @@
 }
 
 
---- tsconfig.json ---
+--- ./tsconfig.json ---
 {
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
@@ -82,7 +197,38 @@
 }
 
 
---- vite.config.ts ---
+--- ./eslint.config.js ---
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+
+export default tseslint.config(
+  { ignores: ['dist'] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  },
+)
+
+
+--- ./vite.config.ts ---
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from "vite-tsconfig-paths";
@@ -115,23 +261,7 @@ export default defineConfig({
 })
 
 
---- tailwind.config.js ---
-/** @type {import('tailwindcss').Config} */
-
-export default {
-  darkMode: "class",
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    container: {
-      center: true,
-    },
-    extend: {},
-  },
-  plugins: [],
-};
-
-
---- postcss.config.js ---
+--- ./postcss.config.js ---
 /** WARNING: DON'T EDIT THIS FILE */
 /** WARNING: DON'T EDIT THIS FILE */
 /** WARNING: DON'T EDIT THIS FILE */
@@ -144,77 +274,78 @@ export default {
 };
 
 
---- vercel.json ---
-{
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
-  "trailingSlash": false
-}
+--- ./.trae/documents/product_requirements_document.md ---
+## 1. 产品概述
+StartAGI登录页面是一个现代化的用户认证界面，采用分屏设计，左侧展示科幻风格的3D芯片插图，右侧提供简洁的登录表单。该页面旨在为用户提供直观、专业的登录体验，作为进入StartAGI系统的入口。
 
+## 2. 核心功能
 
---- index.html ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Trae Project</title>
-    <script type="module">
-      if (import.meta.hot?.on) {
-        import.meta.hot.on('vite:error', (error) => {
-          if (error.err) {
-            console.error(
-              [error.err.message, error.err.frame].filter(Boolean).join('\n'),
-            )
-          }
-        })
-      }
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+### 2.1 用户角色
+本产品暂不需要用户角色区分，所有用户均可访问登录页面。
 
+### 2.2 功能模块
+我们的登录页面包含以下核心模块：
+1. **登录页面**：分屏布局、欢迎标题、登录表单、版权信息。
 
---- eslint.config.js ---
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
+### 2.3 页面详情
+| 页面名称 | 模块名称 | 功能描述 |
+|-----------|-------------|-------------|
+| 登录页面 | 左侧插图区域 | 展示深色科幻3D芯片插图，包含黑色/炭色块体和橙色/金色光线 |
+| 登录页面 | 欢迎标题 | 显示"欢迎来到 StartAGI"标题和副标题文本 |
+| 登录页面 | 登录表单 | 包含账户输入框（带用户图标）、密码输入框（带锁图标）、登录按钮 |
+| 登录页面 | 版权信息 | 显示版权所有文本和年份信息 |
 
-export default tseslint.config(
-  { ignores: ['dist'] },
-  {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-    },
-    plugins: {
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
-    },
-    rules: {
-      ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
-    },
-  },
-)
+## 3. 核心流程
+用户访问登录页面流程：
+1. 用户进入登录页面，看到分屏布局的界面
+2. 在右侧表单的账户输入框中输入账户信息
+3. 在密码输入框中输入密码
+4. 点击"登录"按钮
+5. 系统验证成功后跳转到下一页面
 
+```mermaid
+graph TD
+  A[登录页面] --> B[输入账户]
+  B --> C[输入密码]
+  C --> D[点击登录按钮]
+  D --> E[跳转到下一页面]
+```
 
---- src/App.tsx ---
+## 4. 用户界面设计
+
+### 4.1 设计风格
+- **主色调**：深蓝色渐变 (#3478F6–#3A7BFF)
+- **背景色**：深色面板 (#1f2430到#232833)
+- **文字颜色**：标题白色 (#FFFFFF)，正文浅灰色 (#AEB4BF)，占位符中灰色 (#8C94A3)
+- **输入框背景**：深灰色 (#2A2F3A)
+- **按钮样式**：圆角矩形，实心蓝色，白色文字
+- **字体**：现代无衬线字体，标题32-36px，正文16-18px
+- **图标风格**：线性图标，浅灰色
+
+### 4.2 页面设计概述
+| 页面名称 | 模块名称 | UI元素 |
+|-----------|-------------|-------------|
+| 登录页面 | 左侧插图 | 占据60-65%宽度，深色科幻3D芯片插图，黑色炭色块体配橙色金色光线 |
+| 登录页面 | 右侧面板 | 占据35-40%宽度，深色背景，包含所有交互元素 |
+| 登录页面 | 欢迎标题 | "欢迎来到"白色加粗大字，"StartAGI"蓝色加粗，副标题浅灰色小字 |
+| 登录页面 | 登录区域标题 | "登录"中文白色半粗体，"LOG IN"英文浅灰色大写字母间距 |
+| 登录页面 | 输入框组 | 账户输入框带用户图标，密码输入框带锁图标，深灰色背景，浅灰色边框 |
+| 登录页面 | 登录按钮 | 蓝色渐变背景，白色文字，圆角矩形，全宽度，44-48px高度 |
+| 登录页面 | 版权信息 | 极小字体(11-12px)，浅灰色，底部对齐 |
+
+### 4.3 响应式设计
+- **桌面优先**：默认设计为桌面端，左侧插图和右侧表单固定比例
+- **移动端适配**：在小屏幕设备上调整为上下布局或隐藏插图
+- **触摸优化**：按钮和输入框具有足够的点击区域，适合触摸操作
+
+### 4.4 3D场景指导
+左侧插图区域采用科幻风格的3D芯片设计：
+- **环境氛围**：深色科技实验室环境，营造未来感
+- **光照设置**：主要光源为橙色/金色，营造科技感和温暖感
+- **构图元素**：前景为芯片细节，中景为电路板结构，背景为数据流动效果
+- **性能考虑**：使用优化的3D模型和纹理，确保页面加载速度
+
+--- ./src/App.tsx ---
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Landing from './pages/Landing';
@@ -234,7 +365,7 @@ function App() {
 export default App;
 
 
---- src/main.tsx ---
+--- ./src/main.tsx ---
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
@@ -247,7 +378,7 @@ createRoot(document.getElementById('root')!).render(
 )
 
 
---- src/index.css ---
+--- ./src/index.css ---
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -263,11 +394,49 @@ createRoot(document.getElementById('root')!).render(
   -moz-osx-font-smoothing: grayscale;
 }
 
---- src/vite-env.d.ts ---
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+
+/* Show scrollbar thumb when hovering over the scrollable element */
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4); /* slate-400/40 */
+}
+
+/* Darker on hover of the thumb itself */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.8) !important; /* slate-500/80 */
+}
+
+/* Utility to hide scrollbar but keep functionality */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+
+--- ./src/vite-env.d.ts ---
 /// <reference types="vite/client" />
 
 
---- src/components/Empty.tsx ---
+--- ./src/components/Empty.tsx ---
 import { cn } from '@/lib/utils'
 
 // Empty component
@@ -278,7 +447,7 @@ export default function Empty() {
 }
 
 
---- src/hooks/useTheme.ts ---
+--- ./src/hooks/useTheme.ts ---
 import { useState, useEffect } from 'react';
 
 type Theme = 'light' | 'dark';
@@ -309,7 +478,7 @@ export function useTheme() {
   };
 } 
 
---- src/lib/utils.ts ---
+--- ./src/lib/utils.ts ---
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -318,7 +487,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 
---- src/pages/Login.tsx ---
+--- ./src/pages/Login.tsx ---
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Lock } from 'lucide-react';
@@ -352,7 +521,7 @@ const Login: React.FC = () => {
           {/* Header */}
           <div className="mb-12">
             <h1 className="text-3xl font-bold text-white mb-2">
-              欢迎来到 <span className="text-[#3679ea]">StartAGI</span>
+              欢迎来到 <span className="text-[#0ab7b1]">StartAGI</span>
             </h1>
             <p className="text-[#babdc9] text-sm leading-relaxed">
               xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -361,44 +530,18 @@ const Login: React.FC = () => {
 
           {/* Form Section */}
           <div className="flex-grow flex flex-col justify-center">
-            <div className="flex justify-between items-baseline mb-8">
-              <h2 className="text-xl font-semibold text-white">登录</h2>
-              <span className="text-[#868a9a] text-sm tracking-widest font-medium">LOG IN</span>
+            <div className="flex items-baseline mb-8">
+              <h2 className="text-xl font-semibold text-white mr-4">登录</h2>
+              <span className="text-[#868a9a] text-sm tracking-widest font-medium uppercase">LOG IN</span>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-6">
-              {/* Account Input */}
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-[#babdc9] group-focus-within:text-white transition-colors" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="账户"
-                  className="w-full bg-[#3b3d47] text-white placeholder-[#babdc9] text-sm rounded-sm py-3 pl-12 pr-4 focus:outline-none focus:ring-1 focus:ring-[#3679ea] transition-all"
-                  required
-                />
-              </div>
-
-              {/* Password Input */}
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-[#babdc9] group-focus-within:text-white transition-colors" />
-                </div>
-                <input
-                  type="password"
-                  placeholder="密码"
-                  className="w-full bg-[#3b3d47] text-white placeholder-[#babdc9] text-sm rounded-sm py-3 pl-12 pr-4 focus:outline-none focus:ring-1 focus:ring-[#3679ea] transition-all"
-                  required
-                />
-              </div>
-
-              {/* Login Button */}
+              {/* GIO Quick Login Button */}
               <button
                 type="submit"
-                className="w-full bg-[#3679ea] hover:bg-[#2f68c9] text-white font-semibold py-3 rounded-sm transition-colors mt-8 shadow-lg shadow-blue-900/20"
+                className="w-full bg-[#0ab7b1] hover:bg-[#089e99] text-white font-bold py-3 rounded-sm transition-colors shadow-lg shadow-teal-900/20"
               >
-                登 录
+                GIO 账号快捷登录
               </button>
             </form>
           </div>
@@ -418,7 +561,7 @@ const Login: React.FC = () => {
 export default Login;
 
 
---- src/pages/Landing.tsx ---
+--- ./src/pages/Landing.tsx ---
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -442,6 +585,9 @@ import {
 } from 'lucide-react';
 import iconSidebar from '../assets/icon-sidebar.svg';
 import iconHistory from '../assets/icon-history.svg';
+import logoFull from '../assets/logo_full.png';
+import iconSend from '../assets/icon-send.png';
+import bgMain from '../assets/bg-main.png';
 
 const Landing: React.FC = () => {
   const navigate = useNavigate();
@@ -471,8 +617,11 @@ const Landing: React.FC = () => {
         {/* Brand */}
         <div className="p-6 flex items-center justify-between min-w-[256px]">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 flex items-center justify-center text-white font-bold text-lg shadow-md">S</div>
-            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">StartAGI</h1>
+            <img 
+              src={logoFull} 
+              alt="StartAGI" 
+              className="h-5 w-auto object-contain"
+            />
           </div>
           <img 
             src={iconSidebar} 
@@ -487,18 +636,18 @@ const Landing: React.FC = () => {
           <div 
             className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer transition-all duration-200 ${
               currentView === 'chat' 
-                ? 'bg-indigo-50 text-indigo-600 shadow-sm' 
+                ? 'bg-[#e6f0ff] text-[#016aff] shadow-sm' 
                 : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
             }`}
             onClick={() => setCurrentView('chat')}
           >
-            <MessageSquarePlus className={`w-4 h-4 mr-3 ${currentView === 'chat' ? 'text-indigo-600' : 'text-slate-400'}`} />
+            <MessageSquarePlus className={`w-4 h-4 mr-3 ${currentView === 'chat' ? 'text-[#016aff]' : 'text-slate-400'}`} />
             <span>新对话</span>
           </div>
           <div 
             className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer transition-all duration-200 ${
               currentView === 'analysis' 
-                ? 'bg-indigo-50 text-indigo-600 shadow-sm' 
+                ? 'bg-[#e6f0ff] text-[#016aff] shadow-sm' 
                 : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
             }`}
             onClick={() => {
@@ -506,13 +655,13 @@ const Landing: React.FC = () => {
               setSelectedApp('智能问数');
             }}
           >
-            <BarChart2 className={`w-4 h-4 mr-3 ${currentView === 'analysis' ? 'text-indigo-600' : 'text-slate-400'}`} />
+            <BarChart2 className={`w-4 h-4 mr-3 ${currentView === 'analysis' ? 'text-[#016aff]' : 'text-slate-400'}`} />
             <span>智能问数</span>
           </div>
           <div 
             className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer transition-all duration-200 ${
               currentView === 'persona' 
-                ? 'bg-indigo-50 text-indigo-600 shadow-sm' 
+                ? 'bg-[#e6f0ff] text-[#016aff] shadow-sm' 
                 : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
             }`}
             onClick={() => {
@@ -520,7 +669,7 @@ const Landing: React.FC = () => {
               setSelectedApp(null);
             }}
           >
-            <User className={`w-4 h-4 mr-3 ${currentView === 'persona' ? 'text-indigo-600' : 'text-slate-400'}`} />
+            <User className={`w-4 h-4 mr-3 ${currentView === 'persona' ? 'text-[#016aff]' : 'text-slate-400'}`} />
             <span>智能个体画像</span>
           </div>
           <div className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer transition-all duration-200 group">
@@ -584,7 +733,7 @@ const Landing: React.FC = () => {
         <div className="p-4 border-t border-slate-100 bg-slate-50/50">
           <div className="text-xs text-slate-400 mb-3 font-medium px-1">StartDT产品</div>
           <div className="space-y-2">
-            {['智能增长', '智能制造', '数据治理'].map((item, index) => (
+            {['智能增长平台', '智能湖仓一体平台'].map((item, index) => (
               <div key={index} className="flex items-center px-3 py-2 bg-white border border-slate-100 rounded-lg text-sm text-slate-700 cursor-pointer hover:border-indigo-200 hover:shadow-sm transition-all duration-200">
                 <div className="w-3 h-3 bg-indigo-100 rounded-sm mr-2.5"></div>
                 <span className="text-xs">{item}</span>
@@ -598,9 +747,11 @@ const Landing: React.FC = () => {
       <div className="flex-1 flex flex-col relative z-0">
         {/* Decorative Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-200/20 blur-[120px] mix-blend-multiply"></div>
-          <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-blue-200/20 blur-[100px] mix-blend-multiply"></div>
-          <div className="absolute top-[20%] left-[20%] w-[400px] h-[400px] rounded-full bg-purple-200/20 blur-[80px] mix-blend-multiply"></div>
+          <img 
+            src={bgMain} 
+            alt="Background" 
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Toggle Sidebar Button (when sidebar is closed) */}
@@ -616,20 +767,33 @@ const Landing: React.FC = () => {
         )}
 
         {/* Top Right User Area */}
-        <div className="absolute top-6 right-8 z-10">
+        <div className="absolute top-6 right-8 z-[100]">
           <div 
-            className="flex items-center cursor-pointer hover:opacity-80 transition-opacity group"
+            className="flex items-center cursor-pointer group bg-white rounded-full border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden relative z-[101]"
+            style={{ width: showUserPopover ? 'auto' : '32px', paddingRight: showUserPopover ? '12px' : '0' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.width = 'auto';
+              e.currentTarget.style.paddingRight = '12px';
+            }}
+            onMouseLeave={(e) => {
+              if (!showUserPopover) {
+                e.currentTarget.style.width = '32px';
+                e.currentTarget.style.paddingRight = '0';
+              }
+            }}
             onClick={() => setShowUserPopover(!showUserPopover)}
           >
-            <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center mr-3 shadow-sm group-hover:shadow-md transition-all">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
               <User className="w-4 h-4 text-slate-600" />
             </div>
-            <span className="text-sm text-slate-700 font-medium">个人中心</span>
+            <span className={`text-sm text-slate-700 font-medium whitespace-nowrap overflow-hidden transition-opacity duration-300 ml-1 ${showUserPopover ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>个人中心</span>
           </div>
 
           {/* User Popover */}
           {showUserPopover && (
-            <div className="absolute top-12 right-0 w-72 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6 animate-in fade-in zoom-in duration-200 z-50">
+            <>
+              <div className="fixed inset-0 z-[99]" onClick={() => setShowUserPopover(false)}></div>
+              <div className="absolute top-12 right-0 w-72 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6 animate-in fade-in zoom-in duration-200 z-[100]">
               <div className="space-y-4 mb-6">
                 <div className="text-sm text-slate-600 flex items-center justify-between">
                   <span className="text-slate-400">昵称</span>
@@ -652,6 +816,7 @@ const Landing: React.FC = () => {
                 退出登录
               </div>
             </div>
+          </>
           )}
         </div>
 
@@ -660,8 +825,8 @@ const Landing: React.FC = () => {
           <div className="flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto w-full px-8 animate-in fade-in duration-300 relative z-10">
             {chatTheme === 'default' ? (
               <>
-                <h1 className="text-4xl font-bold text-slate-900 mb-4 tracking-tight">你好，我是 StartAGI</h1>
-                <p className="text-slate-400 text-sm mb-12 tracking-wider font-light">我可以帮你完成查询数据、业务问题诊断、制作报表、分析用户画像等任务哦</p>
+                <h1 className="text-[28px] font-semibold text-slate-900 mb-4 tracking-tight">你好，我是 <span className="font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#00A8FF] to-[#00FFFF]">StartAGI</span></h1>
+                <p className="text-[#999999] text-sm mb-12 tracking-wider font-light">我可以帮你完成查询数据、业务问题诊断、制作报表、分析用户画像、活动策略建议，编写SQL等</p>
               </>
             ) : chatTheme === 'analysis' ? (
               <div className="w-full mb-6">
@@ -689,13 +854,13 @@ const Landing: React.FC = () => {
               </div>
             ) : (
               <>
-                <h1 className="text-4xl font-bold text-slate-900 mb-4 tracking-tight">你好，我是 StartAGI</h1>
-                <p className="text-slate-400 text-sm mb-12 tracking-wider font-light">我可以帮你完成查询数据、业务问题诊断、制作报表、分析用户画像等任务哦</p>
+                <h1 className="text-[28px] font-semibold text-slate-900 mb-4 tracking-tight">你好，我是 <span className="font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#00A8FF] to-[#00FFFF]">StartAGI</span></h1>
+                <p className="text-[#999999] text-sm mb-12 tracking-wider font-light">我可以帮你完成查询数据、业务问题诊断、制作报表、分析用户画像、活动策略建议，编写SQL等</p>
               </>
             )}
 
             {/* Chat Input Card */}
-            <div className="w-full bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 p-5 h-48 relative mb-10 hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300 ring-1 ring-slate-100/50">
+            <div className="w-full bg-white/80 backdrop-blur-sm rounded-2xl border border-white shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] p-5 h-48 relative mb-10 hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
               <div className="flex items-start gap-3 h-full">
                 {/* App Tag */}
                 {chatTheme === 'analysis' && (
@@ -734,13 +899,13 @@ const Landing: React.FC = () => {
                 )}
 
                 <textarea 
-                  className="flex-1 h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent pt-0.5 text-base leading-relaxed"
+                  className="flex-1 h-full resize-none outline-none text-slate-700 placeholder-[#999999] bg-transparent pt-0.5 text-base leading-relaxed"
                   placeholder={
                     chatTheme === 'persona' 
                       ? "请输入关于当前用户（用户ID：250910）的基础信息或行为问题，如：用户会员等级。支持最近30天的数据查询。" 
                       : chatTheme === 'cloud'
                       ? "请输入..."
-                      : "请输入你的问题..."
+                      : "向 StartAGI 提问"
                   }
                 />
               </div>
@@ -775,44 +940,44 @@ const Landing: React.FC = () => {
               </div>
 
               <div className="absolute bottom-4 right-4">
-                <button className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white hover:opacity-90 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-indigo-200">
-                  <Send className="w-5 h-5 ml-0.5" />
-                </button>
+                <img 
+                  src={iconSend} 
+                  alt="Send" 
+                  className="w-10 h-10 cursor-pointer hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
+                />
               </div>
             </div>
 
             {/* Action Chips */}
-            <div className="flex space-x-3">
+            <div className="flex space-x-4">
               <button 
-                className={`px-6 py-2.5 rounded-xl border text-sm font-medium transition-all duration-200 ${
+                className={`px-8 py-3 rounded-full border border-white text-sm font-medium transition-all duration-200 shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm ${
                   chatTheme === 'analysis' 
-                    ? 'bg-teal-50 text-teal-700 border-teal-200 shadow-sm' 
-                    : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 shadow-sm'
+                    ? 'bg-gradient-to-l from-[#d1fdffcc] to-[#bedeffcc] text-slate-900 ring-2 ring-blue-100' 
+                    : 'bg-gradient-to-l from-[#d1fdffcc] to-[#bedeffcc] text-slate-900 hover:opacity-90'
                 }`}
                 onClick={() => setChatTheme(chatTheme === 'analysis' ? 'default' : 'analysis')}
               >智能问数</button>
-              {['智能个体画像', '智能云XX'].map((item, index) => (
-                <button 
-                  key={index} 
-                  className={`px-6 py-2.5 rounded-xl border text-sm font-medium transition-all duration-200 ${
-                    (chatTheme === 'persona' && item === '智能个体画像')
-                      ? 'bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm' 
-                      : (chatTheme === 'cloud' && item === '智能云XX')
-                      ? 'bg-sky-50 text-sky-700 border-sky-200 shadow-sm'
-                      : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 shadow-sm'
-                  }`}
-                  onClick={() => {
-                    if (item === '智能个体画像') {
-                      setChatTheme(chatTheme === 'persona' ? 'default' : 'persona');
-                    } else if (item === '智能云XX') {
-                      setChatTheme(chatTheme === 'cloud' ? 'default' : 'cloud');
-                    }
-                  }}
-                >
-                  {item}
-                </button>
-              ))}
-              <button className="px-6 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center shadow-sm">
+              
+              <button 
+                className={`px-8 py-3 rounded-full border border-white text-sm font-medium transition-all duration-200 shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm ${
+                  chatTheme === 'persona' 
+                    ? 'bg-gradient-to-l from-[#e0e7ff] to-[#c7d2fe] text-slate-900 ring-2 ring-indigo-100' 
+                    : 'bg-gradient-to-l from-[#e0e7ff] to-[#c7d2fe] text-slate-900 hover:opacity-90'
+                }`}
+                onClick={() => setChatTheme(chatTheme === 'persona' ? 'default' : 'persona')}
+              >智能个体画像</button>
+
+              <button 
+                className={`px-8 py-3 rounded-full border border-white text-sm font-medium transition-all duration-200 shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm ${
+                  chatTheme === 'cloud' 
+                    ? 'bg-gradient-to-l from-[#ffe4e6] to-[#fecdd3] text-slate-900 ring-2 ring-rose-100' 
+                    : 'bg-gradient-to-l from-[#ffe4e6] to-[#fecdd3] text-slate-900 hover:opacity-90'
+                }`}
+                onClick={() => setChatTheme(chatTheme === 'cloud' ? 'default' : 'cloud')}
+              >智能云XX</button>
+
+              <button className="px-8 py-3 rounded-full border border-white bg-white/80 text-sm font-medium text-slate-900 hover:bg-white transition-all flex items-center shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm">
                 <span className="mr-1">更多</span>
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>
@@ -820,49 +985,43 @@ const Landing: React.FC = () => {
           </div>
         ) : currentView === 'analysis' ? (
           <div className="flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto w-full px-8 animate-in fade-in duration-300 relative z-10">
-            <h1 className="text-4xl font-bold text-slate-900 mb-16 tracking-tight">言出数随，分析如此简单</h1>
+            <div className="w-24 h-24 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-2xl mb-8 flex items-center justify-center shadow-inner">
+              <BarChart2 className="w-10 h-10 text-teal-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-black mb-10 tracking-tight">言出数随，分析如此简单</h1>
 
             {/* Chat Input Card */}
-            <div className="w-full bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 p-5 h-48 relative mb-10 hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300 ring-1 ring-slate-100/50">
+            <div className="w-full bg-white rounded-xl border border-gray-200 shadow-sm p-5 h-48 relative mb-10 hover:shadow-md transition-all duration-300">
               <div className="flex items-start gap-3 h-full">
                 {/* App Tag */}
                 {selectedApp && (
-                  <div className="flex-shrink-0 flex items-center bg-teal-50 text-teal-600 px-2.5 py-1 rounded-md text-xs font-medium border border-teal-200 mt-0.5">
+                  <div className="flex-shrink-0 flex items-center bg-[#0ab7b11a] text-[#0ab7b1] px-3 py-1 rounded-[2px] text-xs border border-[#0ab7b1] mt-0.5 font-normal">
                     {selectedApp}
-                    <button 
-                      className="ml-2 hover:bg-teal-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedApp(null);
-                      }}
-                    >
-                      ×
-                    </button>
                   </div>
                 )}
 
                 <textarea 
-                  className="flex-1 h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent pt-0.5 text-base leading-relaxed"
+                  className="flex-1 h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent text-base leading-relaxed"
                   placeholder="请输入你的问题..."
                 />
               </div>
               
               <div className="absolute bottom-4 left-4">
                 <div 
-                  className="flex items-center text-sm text-slate-600 cursor-pointer hover:bg-slate-50 px-3 py-1.5 rounded-lg select-none transition-all border border-transparent hover:border-slate-200"
+                  className="flex items-center text-sm text-gray-600 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded select-none transition-colors"
                   onClick={() => setIsAnalysisDropdownOpen(!isAnalysisDropdownOpen)}
                 >
-                  <span className="mr-2 font-medium">{analysisType}</span>
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isAnalysisDropdownOpen ? 'rotate-180' : ''} text-slate-400`} />
+                  <span className="mr-1 font-normal">{analysisType}</span>
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isAnalysisDropdownOpen ? 'rotate-180' : ''} text-gray-400`} />
                 </div>
                 
                 {isAnalysisDropdownOpen && (
-                  <div className="absolute bottom-full left-0 mb-2 w-36 bg-white border border-slate-100 rounded-xl shadow-xl shadow-slate-200/50 z-20 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-left p-1">
+                  <div className="absolute bottom-full left-0 mb-2 w-36 bg-white border border-gray-100 rounded-lg shadow-xl z-20 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-left p-1">
                     {['快速分析', '深度思考'].map((type) => (
                       <div
                         key={type}
-                        className={`px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors ${
-                          analysisType === type ? 'text-indigo-600 bg-indigo-50 font-medium' : 'text-slate-600 hover:bg-slate-50'
+                        className={`px-3 py-2 text-sm rounded-md cursor-pointer transition-colors ${
+                          analysisType === type ? 'text-indigo-600 bg-indigo-50' : 'text-gray-600 hover:bg-gray-50'
                         }`}
                         onClick={() => {
                           setAnalysisType(type);
@@ -877,14 +1036,16 @@ const Landing: React.FC = () => {
               </div>
 
               <div className="absolute bottom-4 right-4">
-                <button className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white hover:opacity-90 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-indigo-200">
-                  <Send className="w-5 h-5 ml-0.5" />
-                </button>
+                <img 
+                  src={iconSend} 
+                  alt="Send" 
+                  className="w-10 h-10 cursor-pointer hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
+                />
               </div>
             </div>
 
             {/* Analysis Chips */}
-            <div className="w-full space-y-4">
+            <div className="w-full">
               <div className="flex flex-wrap gap-3 items-center">
                 {[
                   '过去7天购买总次数是多少？',
@@ -892,14 +1053,14 @@ const Landing: React.FC = () => {
                   '2024年7月促销活动名称为「夏季促销」的购买总次数',
                   '2024年7月按性别查看购买总次数'
                 ].map((item, index) => (
-                  <button key={index} className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm text-slate-600 hover:border-indigo-200 hover:text-indigo-600 hover:shadow-sm transition-all duration-200">
+                  <button key={index} className="px-4 py-2 rounded-full bg-[#f0f0f0] border border-[#f7f8fc] text-xs text-[#666666] hover:bg-gray-200 transition-colors">
                     {item}
                   </button>
                 ))}
                 
                 <div className="flex items-center space-x-4 ml-2">
-                  <div className="flex items-center text-slate-500 text-sm cursor-pointer hover:text-indigo-600 transition-colors">
-                    <svg className="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <div className="flex items-center text-[#666666] text-xs cursor-pointer hover:text-black transition-colors">
+                    <svg className="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                       <path d="M3 3v5h5" />
                       <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
@@ -907,8 +1068,8 @@ const Landing: React.FC = () => {
                     </svg>
                     刷新
                   </div>
-                  <div className="flex items-center text-slate-500 text-sm cursor-pointer hover:text-indigo-600 transition-colors">
-                    <svg className="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <div className="flex items-center text-[#666666] text-xs cursor-pointer hover:text-black transition-colors">
+                    <svg className="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="10" />
                       <path d="M12 6v6l4 2" />
                     </svg>
@@ -927,61 +1088,64 @@ const Landing: React.FC = () => {
             <p className="text-indigo-600 text-sm mb-16 font-medium bg-indigo-50 px-4 py-1.5 rounded-full">支持最近30天的数据查询</p>
 
             {/* Chat Input Card */}
-            <div className="w-full bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 p-5 h-48 relative mb-10 hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300 ring-1 ring-slate-100/50">
-              {/* App Tag */}
-              <div className="absolute top-5 left-5 z-10 flex items-center bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-xs font-medium border border-indigo-200">
-                个体画像
-                <button 
-                  className="ml-2 hover:bg-indigo-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors"
-                  onClick={() => setCurrentView('chat')}
-                >
-                  ×
-                </button>
-              </div>
-
-              <textarea 
-                className="w-full h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent pt-0.5 text-base leading-relaxed indent-[6.5rem]"
-                placeholder="请输入关于当前用户（用户ID：250910）的基础信息或行为问题&#10;如：用户会员等级"
-              />
+            <div className="w-full bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 flex flex-col h-48 mb-10 hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300 ring-1 ring-slate-100/50">
               
-              <div className="absolute bottom-4 left-4">
-                <div 
-                  className="flex items-center text-sm text-slate-600 cursor-pointer hover:bg-slate-50 px-3 py-1.5 rounded-lg select-none transition-all border border-transparent hover:border-slate-200"
-                  onClick={() => setIsAnalysisDropdownOpen(!isAnalysisDropdownOpen)}
-                >
-                  <span className="mr-2 font-medium">{analysisType}</span>
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isAnalysisDropdownOpen ? 'rotate-180' : ''} text-slate-400`} />
+              {/* Input Area */}
+              <div className="flex-1 p-5 relative">
+                {/* App Tag */}
+                <div className="absolute top-5 left-5 z-10 flex items-center bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-xs font-medium border border-indigo-200 select-none">
+                  个体画像
                 </div>
-                
-                {isAnalysisDropdownOpen && (
-                  <div className="absolute bottom-full left-0 mb-2 w-36 bg-white border border-slate-100 rounded-xl shadow-xl shadow-slate-200/50 z-20 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-left p-1">
-                    {['快速分析', '深度思考'].map((type) => (
-                      <div
-                        key={type}
-                        className={`px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors ${
-                          analysisType === type ? 'text-indigo-600 bg-indigo-50 font-medium' : 'text-slate-600 hover:bg-slate-50'
-                        }`}
-                        onClick={() => {
-                          setAnalysisType(type);
-                          setIsAnalysisDropdownOpen(false);
-                        }}
-                      >
-                        {type}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
 
-              <div className="absolute bottom-4 right-4">
-                <button className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white hover:opacity-90 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-indigo-200">
-                  <Send className="w-5 h-5 ml-0.5" />
-                </button>
+                <textarea 
+                  className="w-full h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent text-base leading-relaxed indent-[4.8rem]"
+                  placeholder="请输入关于当前用户（用户ID：250910）的基础信息或行为问题，如：用户会员等级"
+                />
+              </div>
+              
+              {/* Footer Toolbar */}
+              <div className="flex items-center justify-between px-5 pb-5">
+                {/* Left: Dropdown */}
+                <div className="relative">
+                  <div 
+                    className="flex items-center text-sm text-slate-600 cursor-pointer hover:bg-slate-50 px-3 py-1.5 rounded-lg select-none transition-all border border-transparent hover:border-slate-200"
+                    onClick={() => setIsAnalysisDropdownOpen(!isAnalysisDropdownOpen)}
+                  >
+                    <span className="mr-2 font-medium">{analysisType}</span>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isAnalysisDropdownOpen ? 'rotate-180' : ''} text-slate-400`} />
+                  </div>
+                  
+                  {isAnalysisDropdownOpen && (
+                    <div className="absolute bottom-full left-0 mb-2 w-36 bg-white border border-slate-100 rounded-xl shadow-xl shadow-slate-200/50 z-20 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-left p-1">
+                      {['快速分析', '深度思考'].map((type) => (
+                        <div
+                          key={type}
+                          className={`px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors ${
+                            analysisType === type ? 'text-indigo-600 bg-indigo-50 font-medium' : 'text-slate-600 hover:bg-slate-50'
+                          }`}
+                          onClick={() => {
+                            setAnalysisType(type);
+                            setIsAnalysisDropdownOpen(false);
+                          }}
+                        >
+                          {type}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Right: Send Button */}
+                <img 
+                  src={iconSend} 
+                  alt="Send" 
+                  className="w-10 h-10 cursor-pointer hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
+                />
               </div>
             </div>
           </div>
         ) : currentView === 'history_detail' ? (
-          <div className="flex-1 flex flex-col h-full relative max-w-4xl mx-auto w-full z-10">
+          <div className="flex-1 flex flex-col h-full relative max-w-4xl mx-auto w-full z-10 animate-in fade-in duration-300">
             {/* Chat Area */}
             <div className="flex-1 overflow-y-auto px-8 py-6 pb-48">
               {/* User Message */}
@@ -1065,7 +1229,7 @@ const Landing: React.FC = () => {
             </div>
 
             {/* Input Area (Fixed at bottom) */}
-            <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-slate-50 via-slate-50 to-transparent">
+            <div className="absolute bottom-0 left-0 right-0 p-8">
               <div className="w-full bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 p-5 h-32 relative hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300 ring-1 ring-slate-100/50">
                 <textarea 
                   className="w-full h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent pt-0.5 text-base leading-relaxed"
@@ -1076,9 +1240,11 @@ const Landing: React.FC = () => {
                   <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                 </div>
                 <div className="absolute bottom-4 right-4">
-                  <button className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white hover:opacity-90 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-indigo-200">
-                    <Send className="w-5 h-5 ml-0.5" />
-                  </button>
+                  <img 
+                    src={iconSend} 
+                    alt="Send" 
+                    className="w-10 h-10 cursor-pointer hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
+                  />
                 </div>
               </div>
             </div>

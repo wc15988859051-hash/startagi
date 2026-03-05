@@ -17,11 +17,16 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   ChevronUp,
-  Download
+  Download,
+  Moon,
+  Sun
 } from 'lucide-react';
+import { useTheme } from '../hooks/useTheme';
 import iconSidebar from '../assets/icon-sidebar.svg';
 import iconHistory from '../assets/icon-history.svg';
 import logoFull from '../assets/logo_full.png';
+import logoUnion from '../assets/logo-union.png';
+import logoVector from '../assets/logo-vector.png';
 import iconSend from '../assets/icon-send.png';
 import bgMain from '../assets/bg-main.png';
 
@@ -36,6 +41,7 @@ const Landing: React.FC = () => {
   const [selectedApp, setSelectedApp] = useState<string | null>(null);
   const [chatTheme, setChatTheme] = useState<'default' | 'analysis' | 'persona' | 'cloud'>('default');
   const [selectedHistory, setSelectedHistory] = useState<string | null>(null);
+  const { isDark: isDarkMode, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     // In a real app, clear auth tokens here
@@ -43,21 +49,31 @@ const Landing: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50 font-sans text-slate-800 overflow-hidden">
+    <div className={`flex h-screen font-sans text-slate-800 overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-cyan-50 dark:from-[#0f111a] dark:via-[#1a1d2d] dark:to-[#0f111a]`}>
       {/* Sidebar */}
       <div 
         className={`${
           isSidebarOpen ? 'w-64 border-r' : 'w-0 overflow-hidden'
-        } bg-white/80 backdrop-blur-2xl border-indigo-50/50 flex flex-col h-full transition-all duration-300 ease-in-out shadow-sm z-50`}
+        } bg-white/50 backdrop-blur-xl border-white/40 dark:bg-[#1a1d2d]/80 dark:border-white/5 flex flex-col h-full transition-all duration-300 ease-in-out shadow-lg z-50`}
       >
         {/* Brand */}
         <div className="p-6 flex items-center justify-between min-w-[256px]">
           <div className="flex items-center gap-2">
-            <img 
-              src={logoFull} 
-              alt="StartAGI" 
-              className="h-5 w-auto object-contain"
-            />
+            <div className="relative w-8 h-8 flex items-center justify-center">
+              <img 
+                src={logoUnion} 
+                alt="Logo Part 1" 
+                className="w-[27px] h-[17px] object-contain absolute"
+                style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+              />
+              <img 
+                src={logoVector} 
+                alt="Logo Part 2" 
+                className="w-[7px] h-[7px] object-contain absolute"
+                style={{ top: '35%', left: '50%', transform: 'translate(-50%, -50%)' }}
+              />
+            </div>
+            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#016aff] to-cyan-500">StartAGI</span>
           </div>
           <img 
             src={iconSidebar} 
@@ -72,71 +88,71 @@ const Landing: React.FC = () => {
           <div 
             className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer transition-all duration-200 ${
               currentView === 'chat' 
-                ? 'bg-[#e6f0ff] text-[#016aff] shadow-sm' 
-                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                ? 'bg-[#e6f0ff] text-[#016aff] shadow-sm dark:bg-[#016aff]/20 dark:text-[#016aff]' 
+                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200'
             }`}
             onClick={() => setCurrentView('chat')}
           >
-            <MessageSquarePlus className={`w-4 h-4 mr-3 ${currentView === 'chat' ? 'text-[#016aff]' : 'text-slate-400'}`} />
+            <MessageSquarePlus className={`w-4 h-4 mr-3 ${currentView === 'chat' ? 'text-[#016aff] dark:text-[#016aff]' : 'text-slate-400 dark:text-gray-500'}`} />
             <span>新对话</span>
           </div>
           <div 
             className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer transition-all duration-200 ${
               currentView === 'analysis' 
-                ? 'bg-[#e6f0ff] text-[#016aff] shadow-sm' 
-                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                ? 'bg-[#e6f0ff] text-[#016aff] shadow-sm dark:bg-[#016aff]/20 dark:text-[#016aff]' 
+                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200'
             }`}
             onClick={() => {
               setCurrentView('analysis');
               setSelectedApp('智能问数');
             }}
           >
-            <BarChart2 className={`w-4 h-4 mr-3 ${currentView === 'analysis' ? 'text-[#016aff]' : 'text-slate-400'}`} />
+            <BarChart2 className={`w-4 h-4 mr-3 ${currentView === 'analysis' ? 'text-[#016aff] dark:text-[#016aff]' : 'text-slate-400 dark:text-gray-500'}`} />
             <span>智能问数</span>
           </div>
           <div 
             className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer transition-all duration-200 ${
               currentView === 'persona' 
-                ? 'bg-[#e6f0ff] text-[#016aff] shadow-sm' 
-                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                ? 'bg-[#e6f0ff] text-[#016aff] shadow-sm dark:bg-[#016aff]/20 dark:text-[#016aff]' 
+                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200'
             }`}
             onClick={() => {
               setCurrentView('persona');
               setSelectedApp(null);
             }}
           >
-            <User className={`w-4 h-4 mr-3 ${currentView === 'persona' ? 'text-[#016aff]' : 'text-slate-400'}`} />
+            <User className={`w-4 h-4 mr-3 ${currentView === 'persona' ? 'text-[#016aff] dark:text-[#016aff]' : 'text-slate-400 dark:text-gray-500'}`} />
             <span>智能个体画像</span>
           </div>
-          <div className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer transition-all duration-200 group">
+          <div className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer transition-all duration-200 group dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200">
             <div className="flex items-center">
-              <Cloud className="w-4 h-4 mr-3 text-slate-400 group-hover:text-slate-600" />
+              <Cloud className="w-4 h-4 mr-3 text-slate-400 group-hover:text-slate-600 dark:text-gray-500 dark:group-hover:text-gray-300" />
               <span>智能云XX</span>
             </div>
-            <PenLine className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+            <PenLine className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 dark:text-gray-500" />
           </div>
-          <div className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer transition-all duration-200 group">
+          <div className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer transition-all duration-200 group dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200">
             <div className="flex items-center">
-              <MoreHorizontal className="w-4 h-4 mr-3 text-slate-400 group-hover:text-slate-600" />
+              <MoreHorizontal className="w-4 h-4 mr-3 text-slate-400 group-hover:text-slate-600 dark:text-gray-500 dark:group-hover:text-gray-300" />
               <span>更多智能应用</span>
             </div>
-            <ChevronRight className="w-3 h-3 text-slate-400" />
+            <ChevronRight className="w-3 h-3 text-slate-400 dark:text-gray-500" />
           </div>
         </div>
 
-        <div className="my-6 border-t border-slate-100 mx-6"></div>
+        <div className="my-6 border-t border-slate-100 mx-6 dark:border-white/5"></div>
 
         {/* History Section */}
         <div className="flex-1 px-3 min-w-[256px] overflow-y-auto">
           <div 
-            className={`flex items-center justify-between px-3 mb-3 text-slate-400 cursor-pointer hover:text-slate-600 transition-colors ${currentView === 'history' ? 'text-indigo-600 font-medium' : ''}`}
+            className={`flex items-center justify-between px-3 mb-3 text-slate-400 cursor-pointer hover:text-slate-600 transition-colors dark:text-gray-500 dark:hover:text-gray-300 ${currentView === 'history' ? 'text-indigo-600 font-medium dark:text-indigo-400' : ''}`}
             onClick={() => setCurrentView(currentView === 'history' ? 'chat' : 'history')}
           >
             <span className="text-xs font-semibold tracking-wider uppercase">历史对话</span>
             <img 
               src={iconHistory} 
               alt="View All History" 
-              className="w-3 h-3 hover:opacity-70 transition-opacity opacity-60"
+              className="w-3 h-3 hover:opacity-70 transition-opacity opacity-60 dark:opacity-40 dark:invert"
             />
           </div>
           
@@ -146,8 +162,8 @@ const Landing: React.FC = () => {
                 key={index} 
                 className={`flex items-center px-3 py-2 rounded-lg text-sm cursor-pointer transition-all duration-200 group ${
                   currentView === 'history_detail' && selectedHistory === item 
-                    ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm' 
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    ? 'bg-indigo-50 text-indigo-700 font-medium shadow-sm dark:bg-indigo-500/20 dark:text-indigo-300' 
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200'
                 }`}
                 onClick={() => {
                   setSelectedHistory(item);
@@ -156,8 +172,8 @@ const Landing: React.FC = () => {
               >
                 <div className={`w-1.5 h-1.5 rounded-full mr-3 flex-shrink-0 transition-colors ${
                   currentView === 'history_detail' && selectedHistory === item 
-                    ? 'bg-indigo-500' 
-                    : 'bg-slate-200 group-hover:bg-indigo-300'
+                    ? 'bg-indigo-500 dark:bg-indigo-400' 
+                    : 'bg-slate-200 group-hover:bg-indigo-300 dark:bg-white/10 dark:group-hover:bg-indigo-500/50'
                 }`}></div>
                 <span className="truncate opacity-90">{item}</span>
               </div>
@@ -166,12 +182,21 @@ const Landing: React.FC = () => {
         </div>
 
         {/* Footer Products */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50/50">
-          <div className="text-xs text-slate-400 mb-3 font-medium px-1">StartDT产品</div>
+        <div className="p-4 border-t border-slate-100 bg-slate-50/50 dark:bg-white/5 dark:border-white/5">
+          <div className="flex items-center justify-between mb-3 px-1">
+            <div className="text-xs text-slate-400 dark:text-gray-500 font-medium">StartDT产品</div>
+            <button
+              onClick={toggleTheme}
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 dark:text-gray-500 dark:hover:text-gray-300 dark:hover:bg-white/10 transition-colors"
+              title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {isDarkMode ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+            </button>
+          </div>
           <div className="space-y-2">
             {['智能增长平台', '智能湖仓一体平台'].map((item, index) => (
-              <div key={index} className="flex items-center px-3 py-2 bg-white border border-slate-100 rounded-lg text-sm text-slate-700 cursor-pointer hover:border-indigo-200 hover:shadow-sm transition-all duration-200">
-                <div className="w-3 h-3 bg-indigo-100 rounded-sm mr-2.5"></div>
+              <div key={index} className="flex items-center px-3 py-2 bg-white border border-slate-100 rounded-lg text-sm text-slate-700 cursor-pointer hover:border-indigo-200 hover:shadow-sm transition-all duration-200 dark:bg-white/5 dark:border-white/5 dark:text-gray-300 dark:hover:bg-white/10">
+                <div className="w-3 h-3 bg-indigo-100 rounded-sm mr-2.5 dark:bg-indigo-500/30"></div>
                 <span className="text-xs">{item}</span>
               </div>
             ))}
@@ -186,8 +211,9 @@ const Landing: React.FC = () => {
           <img 
             src={bgMain} 
             alt="Background" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover dark:opacity-0 transition-opacity duration-500"
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 pointer-events-none dark:opacity-100 opacity-0 transition-opacity duration-500"></div>
         </div>
 
         {/* Toggle Sidebar Button (when sidebar is closed) */}
@@ -196,7 +222,7 @@ const Landing: React.FC = () => {
             <img 
               src={iconSidebar} 
               alt="Toggle Sidebar" 
-              className="w-4 h-4 cursor-pointer hover:opacity-70 transition-opacity opacity-50"
+              className="w-4 h-4 cursor-pointer hover:opacity-70 transition-opacity opacity-50 dark:opacity-40 dark:invert"
               onClick={() => setIsSidebarOpen(true)}
             />
           </div>
@@ -205,7 +231,7 @@ const Landing: React.FC = () => {
         {/* Top Right User Area */}
         <div className="absolute top-6 right-8 z-[100]">
           <div 
-            className="flex items-center cursor-pointer group bg-white rounded-full border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden relative z-[101]"
+            className="flex items-center cursor-pointer group bg-white rounded-full border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden relative z-[101] dark:bg-[#1a1d2d] dark:border-white/10"
             style={{ width: showUserPopover ? 'auto' : '32px', paddingRight: showUserPopover ? '12px' : '0' }}
             onMouseEnter={(e) => {
               e.currentTarget.style.width = 'auto';
@@ -219,33 +245,33 @@ const Landing: React.FC = () => {
             }}
             onClick={() => setShowUserPopover(!showUserPopover)}
           >
-            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-              <User className="w-4 h-4 text-slate-600" />
+            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 dark:bg-white/5">
+              <User className="w-4 h-4 text-slate-600 dark:text-gray-300" />
             </div>
-            <span className={`text-sm text-slate-700 font-medium whitespace-nowrap overflow-hidden transition-opacity duration-300 ml-1 ${showUserPopover ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>个人中心</span>
+            <span className={`text-sm text-slate-700 font-medium whitespace-nowrap overflow-hidden transition-opacity duration-300 ml-1 dark:text-gray-200 ${showUserPopover ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>个人中心</span>
           </div>
 
           {/* User Popover */}
           {showUserPopover && (
             <>
               <div className="fixed inset-0 z-[99]" onClick={() => setShowUserPopover(false)}></div>
-              <div className="absolute top-12 right-0 w-72 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6 animate-in fade-in zoom-in duration-200 z-[100]">
+              <div className="absolute top-12 right-0 w-72 bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6 animate-in fade-in zoom-in duration-200 z-[100] dark:bg-[#1a1d2d] dark:border-white/10 dark:shadow-black/50">
               <div className="space-y-4 mb-6">
-                <div className="text-sm text-slate-600 flex items-center justify-between">
-                  <span className="text-slate-400">昵称</span>
-                  <span className="font-medium">小童</span>
+                <div className="text-sm text-slate-600 flex items-center justify-between dark:text-gray-400">
+                  <span className="text-slate-400 dark:text-gray-500">昵称</span>
+                  <span className="font-medium dark:text-gray-200">小童</span>
                 </div>
-                <div className="text-sm text-slate-600 flex items-center justify-between">
-                  <span className="text-slate-400">邮箱</span>
-                  <span className="font-medium">liuchulian@startdt.com</span>
+                <div className="text-sm text-slate-600 flex items-center justify-between dark:text-gray-400">
+                  <span className="text-slate-400 dark:text-gray-500">邮箱</span>
+                  <span className="font-medium dark:text-gray-200">liuchulian@startdt.com</span>
                 </div>
-                <div className="text-sm text-slate-600 flex items-center justify-between">
-                  <span className="text-slate-400">手机号</span>
-                  <span className="font-medium">17816869833</span>
+                <div className="text-sm text-slate-600 flex items-center justify-between dark:text-gray-400">
+                  <span className="text-slate-400 dark:text-gray-500">手机号</span>
+                  <span className="font-medium dark:text-gray-200">17816869833</span>
                 </div>
               </div>
               <div 
-                className="flex items-center justify-center w-full py-2.5 rounded-lg text-sm text-slate-600 hover:bg-rose-50 hover:text-rose-600 cursor-pointer transition-all border border-slate-200 hover:border-rose-200"
+                className="flex items-center justify-center w-full py-2.5 rounded-lg text-sm text-slate-600 hover:bg-rose-50 hover:text-rose-600 cursor-pointer transition-all border border-slate-200 hover:border-rose-200 dark:text-gray-400 dark:border-white/10 dark:hover:bg-rose-900/20 dark:hover:text-rose-400 dark:hover:border-rose-900/30"
                 onClick={handleLogout}
               >
                 <LogOut className="w-4 h-4 mr-2" />
@@ -261,15 +287,15 @@ const Landing: React.FC = () => {
           <div className="flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto w-full px-8 animate-in fade-in duration-300 relative z-10">
             {chatTheme === 'default' ? (
               <>
-                <h1 className="text-[28px] font-semibold text-slate-900 mb-4 tracking-tight">你好，我是 <span className="font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#00A8FF] to-[#00FFFF]">StartAGI</span></h1>
-                <p className="text-[#999999] text-sm mb-12 tracking-wider font-light">我可以帮你完成查询数据、业务问题诊断、制作报表、分析用户画像、活动策略建议，编写SQL等</p>
+                <h1 className="text-[28px] font-semibold text-slate-900 mb-4 tracking-tight dark:text-white">你好，我是 <span className="font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#00A8FF] to-[#00FFFF]">StartAGI</span></h1>
+                <p className="text-[#666666] text-sm mb-12 tracking-wider font-normal dark:text-gray-400">我可以帮你完成查询数据、业务问题诊断、制作报表、分析用户画像、活动策略建议，编写SQL等</p>
               </>
             ) : chatTheme === 'analysis' ? (
               <div className="w-full mb-6">
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg shadow-teal-500/5 p-6">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg shadow-teal-500/5 p-6 dark:bg-[#1a1d2d]/60 dark:border-teal-900/30">
                   <div className="flex justify-between items-center mb-4">
-                    <span className="text-xs font-semibold text-teal-600 uppercase tracking-wider">提问示例</span>
-                    <span className="text-xs text-slate-400 cursor-pointer hover:text-teal-600 transition-colors flex items-center gap-1">
+                    <span className="text-xs font-semibold text-teal-600 uppercase tracking-wider dark:text-teal-400">提问示例</span>
+                    <span className="text-xs text-slate-400 cursor-pointer hover:text-teal-600 transition-colors flex items-center gap-1 dark:text-gray-500 dark:hover:text-teal-400">
                       查看问题库 <ChevronRight className="w-3 h-3" />
                     </span>
                   </div>
@@ -280,30 +306,35 @@ const Landing: React.FC = () => {
                       '2024年7月促销活动名称为「夏季促销」的购买总次数',
                       '2024年7月按性别查看购买总次数'
                     ].map((item, index) => (
-                      <button key={index} className="px-3.5 py-2 rounded-lg bg-teal-50 text-xs text-teal-700 hover:bg-teal-100 hover:shadow-sm transition-all border border-transparent hover:border-teal-200">
+                      <button key={index} className="px-3.5 py-2 rounded-lg bg-teal-50 text-xs text-teal-700 hover:bg-teal-100 hover:shadow-sm transition-all border border-transparent hover:border-teal-200 dark:bg-teal-900/20 dark:text-teal-400 dark:hover:bg-teal-900/40 dark:hover:border-teal-800/50">
                         {item}
                       </button>
                     ))}
-                    <div className="w-5 h-5 border-2 border-teal-100 border-t-teal-500 rounded-full animate-spin ml-2"></div>
+                    <div className="w-5 h-5 border-2 border-teal-100 border-t-teal-500 rounded-full animate-spin ml-2 dark:border-teal-900/30 dark:border-t-teal-500"></div>
                   </div>
                 </div>
               </div>
             ) : (
               <>
-                <h1 className="text-[28px] font-semibold text-slate-900 mb-4 tracking-tight">你好，我是 <span className="font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#00A8FF] to-[#00FFFF]">StartAGI</span></h1>
-                <p className="text-[#999999] text-sm mb-12 tracking-wider font-light">我可以帮你完成查询数据、业务问题诊断、制作报表、分析用户画像、活动策略建议，编写SQL等</p>
+                <h1 className="text-[28px] font-semibold text-slate-900 mb-4 tracking-tight dark:text-white">你好，我是 <span className="font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-[#00A8FF] to-[#00FFFF]">StartAGI</span></h1>
+                <p className="text-[#666666] text-sm mb-12 tracking-wider font-normal dark:text-gray-400">我可以帮你完成查询数据、业务问题诊断、制作报表、分析用户画像、活动策略建议，编写SQL等</p>
               </>
             )}
 
             {/* Chat Input Card */}
-            <div className="w-full bg-white/80 backdrop-blur-sm rounded-2xl border border-white shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] p-5 h-48 relative mb-10 hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300">
-              <div className="flex items-start gap-3 h-full">
+            <div className="w-full h-48 relative mb-10 group">
+              {/* Neon Glow & Border */}
+              <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-2xl opacity-70 dark:opacity-100 blur-sm transition-opacity duration-500"></div>
+              <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-2xl opacity-70 dark:opacity-100 transition-opacity duration-500"></div>
+              
+              <div className="relative w-full h-full bg-white/90 backdrop-blur-sm rounded-2xl border border-white/50 shadow-lg p-5 transition-all duration-300 dark:bg-[#0f111a] dark:border-transparent dark:shadow-none overflow-hidden">
+                <div className="flex items-start gap-3 h-full">
                 {/* App Tag */}
                 {chatTheme === 'analysis' && (
-                  <div className="flex-shrink-0 flex items-center bg-teal-50 text-teal-600 px-2.5 py-1 rounded-md text-xs font-medium border border-teal-200 mt-0.5">
+                  <div className="flex-shrink-0 flex items-center bg-teal-50 text-teal-600 px-2.5 py-1 rounded-md text-xs font-medium border border-teal-200 mt-0.5 dark:bg-teal-900/20 dark:text-teal-400 dark:border-teal-800/30">
                     智能问数
                     <button 
-                      className="ml-2 hover:bg-teal-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors"
+                      className="ml-2 hover:bg-teal-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors dark:hover:bg-teal-900/40"
                       onClick={() => setChatTheme('default')}
                     >
                       ×
@@ -311,10 +342,10 @@ const Landing: React.FC = () => {
                   </div>
                 )}
                 {chatTheme === 'persona' && (
-                  <div className="flex-shrink-0 flex items-center bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-xs font-medium border border-indigo-200 mt-0.5">
+                  <div className="flex-shrink-0 flex items-center bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-xs font-medium border border-indigo-200 mt-0.5 dark:bg-indigo-900/20 dark:text-indigo-400 dark:border-indigo-800/30">
                     智能个体画像
                     <button 
-                      className="ml-2 hover:bg-indigo-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors"
+                      className="ml-2 hover:bg-indigo-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors dark:hover:bg-indigo-900/40"
                       onClick={() => setChatTheme('default')}
                     >
                       ×
@@ -323,10 +354,10 @@ const Landing: React.FC = () => {
                 )}
 
                 {chatTheme === 'cloud' && (
-                  <div className="flex-shrink-0 flex items-center bg-sky-50 text-sky-600 px-2.5 py-1 rounded-md text-xs font-medium border border-sky-200 mt-0.5">
+                  <div className="flex-shrink-0 flex items-center bg-sky-50 text-sky-600 px-2.5 py-1 rounded-md text-xs font-medium border border-sky-200 mt-0.5 dark:bg-sky-900/20 dark:text-sky-400 dark:border-sky-800/30">
                     智能云XX
                     <button 
-                      className="ml-2 hover:bg-sky-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors"
+                      className="ml-2 hover:bg-sky-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors dark:hover:bg-sky-900/40"
                       onClick={() => setChatTheme('default')}
                     >
                       ×
@@ -335,7 +366,7 @@ const Landing: React.FC = () => {
                 )}
 
                 <textarea 
-                  className="flex-1 h-full resize-none outline-none text-slate-700 placeholder-[#999999] bg-transparent pt-0.5 text-base leading-relaxed"
+                  className="flex-1 h-full resize-none outline-none text-slate-700 placeholder-[#999999] bg-transparent pt-0.5 text-base leading-relaxed dark:text-gray-200 dark:placeholder-gray-600"
                   placeholder={
                     chatTheme === 'persona' 
                       ? "请输入关于当前用户（用户ID：250910）的基础信息或行为问题，如：用户会员等级。支持最近30天的数据查询。" 
@@ -348,20 +379,20 @@ const Landing: React.FC = () => {
               
               <div className="absolute bottom-4 left-4">
                 <div 
-                  className="flex items-center text-sm text-slate-600 cursor-pointer hover:bg-slate-50 px-3 py-1.5 rounded-lg select-none transition-all border border-transparent hover:border-slate-200"
+                  className="flex items-center text-sm text-slate-600 cursor-pointer hover:bg-slate-50 px-3 py-1.5 rounded-lg select-none transition-all border border-transparent hover:border-slate-200 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:border-white/10"
                   onClick={() => setIsAnalysisDropdownOpen(!isAnalysisDropdownOpen)}
                 >
                   <span className="mr-2 font-medium">{analysisType}</span>
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isAnalysisDropdownOpen ? 'rotate-180' : ''} text-slate-400`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isAnalysisDropdownOpen ? 'rotate-180' : ''} text-slate-400 dark:text-gray-500`} />
                 </div>
                 
                 {isAnalysisDropdownOpen && (
-                  <div className="absolute bottom-full left-0 mb-2 w-36 bg-white border border-slate-100 rounded-xl shadow-xl shadow-slate-200/50 z-20 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-left p-1">
+                  <div className="absolute bottom-full left-0 mb-2 w-36 bg-white border border-slate-100 rounded-xl shadow-xl shadow-slate-200/50 z-20 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-left p-1 dark:bg-[#252836] dark:border-white/10 dark:shadow-black/50">
                     {['快速分析', '深度思考'].map((type) => (
                       <div
                         key={type}
                         className={`px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors ${
-                          analysisType === type ? 'text-indigo-600 bg-indigo-50 font-medium' : 'text-slate-600 hover:bg-slate-50'
+                          analysisType === type ? 'text-indigo-600 bg-indigo-50 font-medium dark:bg-indigo-900/30 dark:text-indigo-400' : 'text-slate-600 hover:bg-slate-50 dark:text-gray-400 dark:hover:bg-white/5'
                         }`}
                         onClick={() => {
                           setAnalysisType(type);
@@ -383,37 +414,47 @@ const Landing: React.FC = () => {
                 />
               </div>
             </div>
+            </div>
 
             {/* Action Chips */}
             <div className="flex space-x-4">
               <button 
-                className={`px-8 py-3 rounded-full border border-white text-sm font-medium transition-all duration-200 shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm ${
+                className={`px-8 py-3 rounded-full border text-sm font-medium transition-all duration-200 shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm flex items-center gap-2 ${
                   chatTheme === 'analysis' 
-                    ? 'bg-gradient-to-l from-[#d1fdffcc] to-[#bedeffcc] text-slate-900 ring-2 ring-blue-100' 
-                    : 'bg-gradient-to-l from-[#d1fdffcc] to-[#bedeffcc] text-slate-900 hover:opacity-90'
+                    ? 'bg-white border-teal-600 text-teal-600 dark:bg-white/10 dark:border-teal-400 dark:text-teal-400' 
+                    : 'bg-white/80 border-white text-slate-900 hover:bg-white dark:bg-white/5 dark:border-white/5 dark:text-gray-200 dark:hover:bg-white/10'
                 }`}
                 onClick={() => setChatTheme(chatTheme === 'analysis' ? 'default' : 'analysis')}
-              >智能问数</button>
+              >
+                <BarChart2 className="w-4 h-4" />
+                智能问数
+              </button>
               
               <button 
-                className={`px-8 py-3 rounded-full border border-white text-sm font-medium transition-all duration-200 shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm ${
+                className={`px-8 py-3 rounded-full border text-sm font-medium transition-all duration-200 shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm flex items-center gap-2 ${
                   chatTheme === 'persona' 
-                    ? 'bg-gradient-to-l from-[#e0e7ff] to-[#c7d2fe] text-slate-900 ring-2 ring-indigo-100' 
-                    : 'bg-gradient-to-l from-[#e0e7ff] to-[#c7d2fe] text-slate-900 hover:opacity-90'
+                    ? 'bg-white border-indigo-600 text-indigo-600 dark:bg-white/10 dark:border-indigo-400 dark:text-indigo-400' 
+                    : 'bg-white/80 border-white text-slate-900 hover:bg-white dark:bg-white/5 dark:border-white/5 dark:text-gray-200 dark:hover:bg-white/10'
                 }`}
                 onClick={() => setChatTheme(chatTheme === 'persona' ? 'default' : 'persona')}
-              >智能个体画像</button>
+              >
+                <User className="w-4 h-4" />
+                智能个体画像
+              </button>
 
               <button 
-                className={`px-8 py-3 rounded-full border border-white text-sm font-medium transition-all duration-200 shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm ${
+                className={`px-8 py-3 rounded-full border text-sm font-medium transition-all duration-200 shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm flex items-center gap-2 ${
                   chatTheme === 'cloud' 
-                    ? 'bg-gradient-to-l from-[#ffe4e6] to-[#fecdd3] text-slate-900 ring-2 ring-rose-100' 
-                    : 'bg-gradient-to-l from-[#ffe4e6] to-[#fecdd3] text-slate-900 hover:opacity-90'
+                    ? 'bg-white border-rose-600 text-rose-600 dark:bg-white/10 dark:border-rose-400 dark:text-rose-400' 
+                    : 'bg-white/80 border-white text-slate-900 hover:bg-white dark:bg-white/5 dark:border-white/5 dark:text-gray-200 dark:hover:bg-white/10'
                 }`}
                 onClick={() => setChatTheme(chatTheme === 'cloud' ? 'default' : 'cloud')}
-              >智能云XX</button>
+              >
+                <Cloud className="w-4 h-4" />
+                智能云XX
+              </button>
 
-              <button className="px-8 py-3 rounded-full border border-white bg-white/80 text-sm font-medium text-slate-900 hover:bg-white transition-all flex items-center shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm">
+              <button className="px-8 py-3 rounded-full border border-white bg-white/80 text-sm font-medium text-slate-900 hover:bg-white transition-all flex items-center shadow-[0_10px_37px_-4px_rgba(132,158,172,0.18)] backdrop-blur-sm dark:bg-white/5 dark:border-white/5 dark:text-gray-300 dark:shadow-none dark:hover:bg-white/10">
                 <span className="mr-1">更多</span>
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>
@@ -421,43 +462,48 @@ const Landing: React.FC = () => {
           </div>
         ) : currentView === 'analysis' ? (
           <div className="flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto w-full px-8 animate-in fade-in duration-300 relative z-10">
-            <div className="w-24 h-24 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-2xl mb-8 flex items-center justify-center shadow-inner">
-              <BarChart2 className="w-10 h-10 text-teal-600" />
+            <div className="w-24 h-24 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-2xl mb-8 flex items-center justify-center shadow-inner dark:from-teal-900/30 dark:to-cyan-900/30 dark:shadow-none">
+              <BarChart2 className="w-10 h-10 text-teal-600 dark:text-teal-400" />
             </div>
-            <h1 className="text-3xl font-bold text-black mb-10 tracking-tight">言出数随，分析如此简单</h1>
+            <h1 className="text-3xl font-bold text-black mb-10 tracking-tight dark:text-white">言出数随，分析如此简单</h1>
 
             {/* Chat Input Card */}
-            <div className="w-full bg-white rounded-xl border border-gray-200 shadow-sm p-5 h-48 relative mb-10 hover:shadow-md transition-all duration-300">
-              <div className="flex items-start gap-3 h-full">
+            <div className="w-full h-48 relative mb-10 group">
+              {/* Neon Glow & Border */}
+              <div className="absolute -inset-[1px] bg-gradient-to-r from-teal-300 via-cyan-400 to-blue-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-xl opacity-70 dark:opacity-100 blur-sm transition-opacity duration-500"></div>
+              <div className="absolute -inset-[1px] bg-gradient-to-r from-teal-300 via-cyan-400 to-blue-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-xl opacity-70 dark:opacity-100 transition-opacity duration-500"></div>
+
+              <div className="relative w-full h-full bg-white/90 rounded-xl border border-white/50 shadow-lg p-5 transition-all duration-300 dark:bg-[#0f111a] dark:border-transparent dark:shadow-none overflow-hidden">
+                <div className="flex items-start gap-3 h-full">
                 {/* App Tag */}
                 {selectedApp && (
-                  <div className="flex-shrink-0 flex items-center bg-[#0ab7b11a] text-[#0ab7b1] px-3 py-1 rounded-[2px] text-xs border border-[#0ab7b1] mt-0.5 font-normal">
+                  <div className="flex-shrink-0 flex items-center bg-[#0ab7b11a] text-[#0ab7b1] px-3 py-1 rounded-[2px] text-xs border border-[#0ab7b1] mt-0.5 font-normal dark:bg-[#0ab7b1]/20 dark:text-[#0ab7b1] dark:border-[#0ab7b1]/30">
                     {selectedApp}
                   </div>
                 )}
 
                 <textarea 
-                  className="flex-1 h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent text-base leading-relaxed"
+                  className="flex-1 h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent text-base leading-relaxed dark:text-gray-200 dark:placeholder-gray-600"
                   placeholder="请输入你的问题..."
                 />
               </div>
               
               <div className="absolute bottom-4 left-4">
                 <div 
-                  className="flex items-center text-sm text-gray-600 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded select-none transition-colors"
+                  className="flex items-center text-sm text-gray-600 cursor-pointer hover:bg-gray-50 px-2 py-1 rounded select-none transition-colors dark:text-gray-400 dark:hover:bg-white/5"
                   onClick={() => setIsAnalysisDropdownOpen(!isAnalysisDropdownOpen)}
                 >
                   <span className="mr-1 font-normal">{analysisType}</span>
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isAnalysisDropdownOpen ? 'rotate-180' : ''} text-gray-400`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isAnalysisDropdownOpen ? 'rotate-180' : ''} text-gray-400 dark:text-gray-500`} />
                 </div>
                 
                 {isAnalysisDropdownOpen && (
-                  <div className="absolute bottom-full left-0 mb-2 w-36 bg-white border border-gray-100 rounded-lg shadow-xl z-20 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-left p-1">
+                  <div className="absolute bottom-full left-0 mb-2 w-36 bg-white border border-gray-100 rounded-lg shadow-xl z-20 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-left p-1 dark:bg-[#252836] dark:border-white/10 dark:shadow-black/50">
                     {['快速分析', '深度思考'].map((type) => (
                       <div
                         key={type}
                         className={`px-3 py-2 text-sm rounded-md cursor-pointer transition-colors ${
-                          analysisType === type ? 'text-indigo-600 bg-indigo-50' : 'text-gray-600 hover:bg-gray-50'
+                          analysisType === type ? 'text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-400' : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-white/5'
                         }`}
                         onClick={() => {
                           setAnalysisType(type);
@@ -478,6 +524,7 @@ const Landing: React.FC = () => {
                   className="w-10 h-10 cursor-pointer hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
                 />
               </div>
+            </div>
             </div>
 
             {/* Analysis Chips */}
@@ -489,13 +536,13 @@ const Landing: React.FC = () => {
                   '2024年7月促销活动名称为「夏季促销」的购买总次数',
                   '2024年7月按性别查看购买总次数'
                 ].map((item, index) => (
-                  <button key={index} className="px-4 py-2 rounded-full bg-[#f0f0f0] border border-[#f7f8fc] text-xs text-[#666666] hover:bg-gray-200 transition-colors">
+                  <button key={index} className="px-4 py-2 rounded-full bg-transparent border border-slate-200 text-xs text-slate-600 hover:bg-slate-50 transition-colors dark:bg-white/5 dark:border-white/5 dark:text-gray-400 dark:hover:bg-white/10">
                     {item}
                   </button>
                 ))}
                 
                 <div className="flex items-center space-x-4 ml-2">
-                  <div className="flex items-center text-[#666666] text-xs cursor-pointer hover:text-black transition-colors">
+                  <div className="flex items-center text-[#666666] text-xs cursor-pointer hover:text-black transition-colors dark:text-gray-500 dark:hover:text-gray-300">
                     <svg className="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                       <path d="M3 3v5h5" />
@@ -504,7 +551,7 @@ const Landing: React.FC = () => {
                     </svg>
                     刷新
                   </div>
-                  <div className="flex items-center text-[#666666] text-xs cursor-pointer hover:text-black transition-colors">
+                  <div className="flex items-center text-[#666666] text-xs cursor-pointer hover:text-black transition-colors dark:text-gray-500 dark:hover:text-gray-300">
                     <svg className="w-3.5 h-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="10" />
                       <path d="M12 6v6l4 2" />
@@ -517,24 +564,29 @@ const Landing: React.FC = () => {
           </div>
         ) : currentView === 'persona' ? (
           <div className="flex-1 flex flex-col items-center justify-center max-w-4xl mx-auto w-full px-8 animate-in fade-in duration-300 relative z-10">
-            <div className="w-24 h-24 bg-gradient-to-br from-indigo-100 to-violet-100 rounded-2xl mb-8 flex items-center justify-center shadow-inner">
+            <div className="w-24 h-24 bg-gradient-to-br from-indigo-100 to-violet-100 rounded-2xl mb-8 flex items-center justify-center shadow-inner dark:from-indigo-900/30 dark:to-violet-900/30 dark:shadow-none">
               <User className="w-10 h-10 text-indigo-400" />
             </div>
-            <h1 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">想了解用户的基础信息和行为，来问我吧</h1>
-            <p className="text-indigo-600 text-sm mb-16 font-medium bg-indigo-50 px-4 py-1.5 rounded-full">支持最近30天的数据查询</p>
+            <h1 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight dark:text-white">想了解用户的基础信息和行为，来问我吧</h1>
+            <p className="text-indigo-600 text-sm mb-16 font-medium bg-indigo-50 px-4 py-1.5 rounded-full dark:bg-indigo-900/20 dark:text-indigo-400">支持最近30天的数据查询</p>
 
             {/* Chat Input Card */}
-            <div className="w-full bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 flex flex-col h-48 mb-10 hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300 ring-1 ring-slate-100/50">
-              
-              {/* Input Area */}
+            <div className="w-full h-48 relative mb-10 group">
+              {/* Neon Glow & Border */}
+              <div className="absolute -inset-[1px] bg-gradient-to-r from-indigo-300 via-purple-400 to-pink-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-2xl opacity-70 dark:opacity-100 blur-sm transition-opacity duration-500"></div>
+              <div className="absolute -inset-[1px] bg-gradient-to-r from-indigo-300 via-purple-400 to-pink-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-2xl opacity-70 dark:opacity-100 transition-opacity duration-500"></div>
+
+              <div className="relative w-full h-full bg-white/90 rounded-2xl border border-white/50 shadow-lg flex flex-col transition-all duration-300 dark:bg-[#0f111a] dark:border-transparent dark:shadow-none overflow-hidden">
+                
+                {/* Input Area */}
               <div className="flex-1 p-5 relative">
                 {/* App Tag */}
-                <div className="absolute top-5 left-5 z-10 flex items-center bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-xs font-medium border border-indigo-200 select-none">
+                <div className="absolute top-5 left-5 z-10 flex items-center bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-md text-xs font-medium border border-indigo-200 select-none dark:bg-indigo-900/20 dark:text-indigo-400 dark:border-indigo-800/30">
                   个体画像
                 </div>
 
                 <textarea 
-                  className="w-full h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent text-base leading-relaxed indent-[4.8rem]"
+                  className="w-full h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent text-base leading-relaxed indent-[4.8rem] dark:text-gray-200 dark:placeholder-gray-600"
                   placeholder="请输入关于当前用户（用户ID：250910）的基础信息或行为问题，如：用户会员等级"
                 />
               </div>
@@ -544,20 +596,20 @@ const Landing: React.FC = () => {
                 {/* Left: Dropdown */}
                 <div className="relative">
                   <div 
-                    className="flex items-center text-sm text-slate-600 cursor-pointer hover:bg-slate-50 px-3 py-1.5 rounded-lg select-none transition-all border border-transparent hover:border-slate-200"
+                    className="flex items-center text-sm text-slate-600 cursor-pointer hover:bg-slate-50 px-3 py-1.5 rounded-lg select-none transition-all border border-transparent hover:border-slate-200 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:border-white/10"
                     onClick={() => setIsAnalysisDropdownOpen(!isAnalysisDropdownOpen)}
                   >
                     <span className="mr-2 font-medium">{analysisType}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isAnalysisDropdownOpen ? 'rotate-180' : ''} text-slate-400`} />
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isAnalysisDropdownOpen ? 'rotate-180' : ''} text-slate-400 dark:text-gray-500`} />
                   </div>
                   
                   {isAnalysisDropdownOpen && (
-                    <div className="absolute bottom-full left-0 mb-2 w-36 bg-white border border-slate-100 rounded-xl shadow-xl shadow-slate-200/50 z-20 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-left p-1">
+                    <div className="absolute bottom-full left-0 mb-2 w-36 bg-white border border-slate-100 rounded-xl shadow-xl shadow-slate-200/50 z-20 overflow-hidden animate-in fade-in zoom-in duration-200 origin-bottom-left p-1 dark:bg-[#252836] dark:border-white/10 dark:shadow-black/50">
                       {['快速分析', '深度思考'].map((type) => (
                         <div
                           key={type}
                           className={`px-3 py-2 text-sm rounded-lg cursor-pointer transition-colors ${
-                            analysisType === type ? 'text-indigo-600 bg-indigo-50 font-medium' : 'text-slate-600 hover:bg-slate-50'
+                            analysisType === type ? 'text-indigo-600 bg-indigo-50 font-medium dark:bg-indigo-900/30 dark:text-indigo-400' : 'text-slate-600 hover:bg-slate-50 dark:text-gray-400 dark:hover:bg-white/5'
                           }`}
                           onClick={() => {
                             setAnalysisType(type);
@@ -578,6 +630,7 @@ const Landing: React.FC = () => {
                   className="w-10 h-10 cursor-pointer hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
                 />
               </div>
+            </div>
             </div>
           </div>
         ) : currentView === 'history_detail' ? (
@@ -666,21 +719,27 @@ const Landing: React.FC = () => {
 
             {/* Input Area (Fixed at bottom) */}
             <div className="absolute bottom-0 left-0 right-0 p-8">
-              <div className="w-full bg-white rounded-2xl border border-slate-200 shadow-xl shadow-slate-200/50 p-5 h-32 relative hover:shadow-2xl hover:shadow-slate-200/60 transition-all duration-300 ring-1 ring-slate-100/50">
-                <textarea 
-                  className="w-full h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent pt-0.5 text-base leading-relaxed"
-                  placeholder="请输入你的问题..."
-                />
-                <div className="absolute bottom-4 left-4 flex items-center text-sm text-slate-600 cursor-pointer hover:bg-slate-50 px-3 py-1.5 rounded-lg transition-colors">
-                  <span className="mr-2 font-medium">快速分析</span>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                </div>
-                <div className="absolute bottom-4 right-4">
-                  <img 
-                    src={iconSend} 
-                    alt="Send" 
-                    className="w-10 h-10 cursor-pointer hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
+              <div className="w-full h-32 relative group">
+                {/* Neon Glow & Border */}
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-indigo-300 via-purple-400 to-pink-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-2xl opacity-70 dark:opacity-100 blur-sm transition-opacity duration-500"></div>
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-indigo-300 via-purple-400 to-pink-400 dark:from-violet-600 dark:via-pink-500 dark:to-orange-500 rounded-2xl opacity-70 dark:opacity-100 transition-opacity duration-500"></div>
+
+                <div className="relative w-full h-full bg-white/90 rounded-2xl border border-white/50 shadow-lg p-5 transition-all duration-300 dark:bg-[#0f111a] dark:border-transparent dark:shadow-none overflow-hidden">
+                  <textarea 
+                    className="w-full h-full resize-none outline-none text-slate-700 placeholder-slate-400 bg-transparent pt-0.5 text-base leading-relaxed dark:text-gray-200 dark:placeholder-gray-600"
+                    placeholder="请输入你的问题..."
                   />
+                  <div className="absolute bottom-4 left-4 flex items-center text-sm text-slate-600 cursor-pointer hover:bg-slate-50 px-3 py-1.5 rounded-lg transition-colors dark:text-gray-400 dark:hover:bg-white/5">
+                    <span className="mr-2 font-medium">快速分析</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 dark:text-gray-500" />
+                  </div>
+                  <div className="absolute bottom-4 right-4">
+                    <img 
+                      src={iconSend} 
+                      alt="Send" 
+                      className="w-10 h-10 cursor-pointer hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
