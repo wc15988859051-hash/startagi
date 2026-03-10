@@ -603,10 +603,10 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import logoUnionNew from '../assets/logo-union-new.png';
-import iconVector1 from '../assets/icon-vector-1.png';
-import iconVector2 from '../assets/icon-vector-2.png';
-import iconVector3 from '../assets/icon-vector-3.png';
-import iconVector4 from '../assets/icon-vector-4.png';
+import iconAnalysis from '../assets/icon-analysis.png';
+import iconPersona from '../assets/icon-persona.png';
+import iconCloud from '../assets/icon-cloud.png';
+import iconMore from '../assets/icon-more.png';
 import iconSend from '../assets/icon-send.png';
 import bgMain from '../assets/bg-main.png';
 import iconSidebar from '../assets/icon-sidebar.svg';
@@ -677,7 +677,7 @@ const Landing: React.FC = () => {
             onClick={() => setChatTheme('analysis')}
           >
             <div className="w-5 h-5 flex items-center justify-center mr-3">
-              <img src={iconVector1} alt="Analysis" className={`w-auto h-auto max-w-full max-h-full ${chatTheme === 'analysis' ? '' : 'opacity-60 grayscale'}`} />
+              <img src={iconAnalysis} alt="Analysis" className={`w-auto h-auto max-w-full max-h-full ${chatTheme === 'analysis' ? '' : 'opacity-60 grayscale'}`} />
             </div>
             <span>智能问数</span>
           </div>
@@ -691,7 +691,7 @@ const Landing: React.FC = () => {
             onClick={() => setChatTheme('persona')}
           >
             <div className="w-5 h-5 flex items-center justify-center mr-3">
-              <img src={iconVector2} alt="Persona" className={`w-auto h-auto max-w-full max-h-full ${chatTheme === 'persona' ? '' : 'opacity-60 grayscale'}`} />
+              <img src={iconPersona} alt="Persona" className={`w-auto h-auto max-w-full max-h-full ${chatTheme === 'persona' ? '' : 'opacity-60 grayscale'}`} />
             </div>
             <span>智能个体画像</span>
           </div>
@@ -705,7 +705,7 @@ const Landing: React.FC = () => {
             onClick={() => setChatTheme('cloud')}
           >
             <div className="w-5 h-5 flex items-center justify-center mr-3">
-              <img src={iconVector3} alt="Cloud" className={`w-auto h-auto max-w-full max-h-full ${chatTheme === 'cloud' ? '' : 'opacity-60 grayscale'}`} />
+              <img src={iconCloud} alt="Cloud" className={`w-auto h-auto max-w-full max-h-full ${chatTheme === 'cloud' ? '' : 'opacity-60 grayscale'}`} />
             </div>
             <span>智能云</span>
           </div>
@@ -713,7 +713,7 @@ const Landing: React.FC = () => {
           <div className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm text-slate-600 hover:bg-slate-50 cursor-pointer transition-all duration-200 group dark:text-gray-400 dark:hover:bg-white/5">
             <div className="flex items-center">
               <div className="w-5 h-5 flex items-center justify-center mr-3">
-                <img src={iconVector4} alt="More" className="w-auto h-auto max-w-full max-h-full opacity-60 grayscale group-hover:grayscale-0" />
+                <img src={iconMore} alt="More" className="w-auto h-auto max-w-full max-h-full opacity-60 grayscale group-hover:grayscale-0" />
               </div>
               <span>更多智能应用</span>
             </div>
